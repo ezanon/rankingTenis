@@ -1,0 +1,165 @@
+@charset "utf-8";
+/* CSS Document */
+
+#all {
+	font-family:"Courier New", Courier, monospace;
+	font-size:12px;
+	width:800px;
+}
+
+#all p {
+	clear:both;
+}
+
+#all blockquote {
+	left: 25px;	
+}
+
+#misto, #feminino {
+	padding: 5px;
+	margin: 5px 0 5px 0;
+}
+
+#misto {
+	background-color: #C4FABC;
+}
+
+#feminino {
+	background-color: #FDDFFD;
+}
+
+/****************************
+TABELA
+****************************/
+table {
+	border:1px solid #999999;
+	background-color:#FFF;
+}
+
+h1, h2, h3, h4, destaque{
+	font-size: 3em;
+	font-weight:bold;
+	font-style:italic;
+}
+
+h2{
+	font-size: 2.5em;
+}
+
+h3{
+	font-size: 1.5em;
+}
+
+h4{
+	font-size: 1em;
+}
+
+destaque {
+	color:#FF0000;
+	font-size: 1.5em;
+}
+
+tr {
+	background-color:#DDDDDD;
+	text-align: center;
+	border: 1px solid #CCCCCC;
+}
+
+tr.jogador_online_VERDE, tr.jogador_online_AMARELO, tr.jogador_online_VERMELHO, tr.jogador_online_BRANCO {
+	font-size: 1.5em;
+	font-weight:bold;
+	font-style:italic;
+	background-color:#00CC99;
+}
+
+tr.jogador_online_AMARELO {
+	background-color:#FFFF66;
+}
+
+tr.jogador_online_VERMELHO {
+	background-color:#FF0033;
+}
+
+tr.jogador_online_BRANCO {
+	background-color:#FFFFFF;
+}
+
+td.nome {
+	text-align:left;
+	font-style:italic;
+}
+
+td.wo {
+	color:#FF0000;
+	font-weight:bold;
+	font-size:1.2em;
+}
+
+td.jogador_VERDE {
+	background-color:#00CC99;
+}
+
+td.jogador_AMARELO {
+	background-color:#FFFF66;
+}
+
+td.jogador_BRANCO {
+	background-color:#FFFFFF;
+}
+
+td.jogador_VERMELHO {
+	background-color:#FF0033;
+}
+
+
+
+
+
+
+
+/************************/
+
+.box {
+	float:left;
+	clear:both;
+	margin: 5px 5px 5px 5px;
+	padding: 10px;
+	overflow:hidden;
+	padding: 10px;
+	border: 1px solid #DDDDDD;
+	background-color:#efd5d2;
+	position: relative;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	width:99%;
+	position:relative;
+}
+
+.box campo{
+	clear:both;
+	float:left;
+	line-height:1.5em;
+	position:relative;
+	width:90%;	
+}
+
+.box label{
+	font-weight:bold;
+	width:80px;
+	float:left;
+	clear:left;
+}
+
+.box valor{
+	font-size:120%;
+	font-style:italic;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	width:70%;
+}
+
+.box comprar{
+	position:absolute;
+	right: 5px;
+	top: 5px;
+}
