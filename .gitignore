@@ -1,8 +1,9 @@
 .gitignore
 nbproject/
+nbproject/*
 bkpAll.php
 sql_atualizacoes.php
 to_do.html
 jogadores/
 files/
-util/
+
