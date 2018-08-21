@@ -1,9 +1,13 @@
 .gitignore
 nbproject/
 nbproject/*
+nbproject*
+nbproject/project.properties
 bkpAll.php
 sql_atualizacoes.php
 to_do.html
-jogadores/
-files/
+jogadores/*
+files/*
+*desktop.ini
+
 
