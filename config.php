@@ -3,14 +3,14 @@
 $config = array(
 	'driver' => 'mysql',
 	'host' => 'localhost',
-	'database' => 'rankingtenis',
-	'user' => 'rankingtenis',
-	'pass' => 'DxVhDKPPNRcyHVVd',
+	'database' => 'dev_rankingtenis',
+	'user' => 'developer',
+	'pass' => 'developer',
 	'pass_admin' => 'ed05c6f3ba85a201a478267fa6ef9e2a' 
 		// 'bontenis!@#'
 );
 
-$config_dev = array(
+/*$config_dev = array(
 	'driver' => 'mysql',
 	'host' => 'localhost',
 	'database' => 'rankingtenis',

@@ -141,19 +141,19 @@ class rodada {
 					}
 					continue;
 				}
-				$xml = "<jogo>
-							<rodada_numero>" . $this->numero . "</rodada_numero>
-							<rodada_ano>" . $this->ano . "</rodada_ano>
-							<desafiante>" . $desafiante->nome_completo . "</desafiante>
-							<desafiado>" . $desafiado->nome_completo . "</desafiado>
-							<desafiante_id>" . $desafiante->id . "</desafiante>
-							<desafiado_id>" . $desafiado->id . "</desafiado>
-							<desafiante_posicao>" . $jogo->desafiante_posicao . "</desafiante_posicao>
-							<desafiado_posicao>" . $jogo->desafiado_posicao . "</desafiado_posicao>
-							<vencedor>" . $jogo->vencedor . "</vencedor>
-							<desafiado_sets>" . $jogo->desafiante_sets . "</desafiado_sets>
-							<desafiado_sets>" . $jogo->desafiado_sets . "</desafiado_sets>
-							<parciais>" . $jogo->parciais . "</parciais>";
+				$xml = "<jogo>\n
+                                            <rodada_numero>" . $this->numero . "</rodada_numero>\n
+                                            <rodada_ano>" . $this->ano . "</rodada_ano>\n
+                                            <desafiante>" . $desafiante->nome_completo . "</desafiante>\n
+                                            <desafiado>" . $desafiado->nome_completo . "</desafiado>\n
+                                            <desafiante_id>" . $desafiante->id . "</desafiante_id>\n
+                                            <desafiado_id>" . $desafiado->id . "</desafiado_id>\n
+                                            <desafiante_posicao>" . $jogo->desafiante_posicao . "</desafiante_posicao>\n
+                                            <desafiado_posicao>" . $jogo->desafiado_posicao . "</desafiado_posicao>\n
+                                            <vencedor>" . $jogo->vencedor . "</vencedor>\n
+                                            <desafiado_sets>" . $jogo->desafiante_sets . "</desafiado_sets>\n
+                                            <desafiado_sets>" . $jogo->desafiado_sets . "</desafiado_sets>\n
+                                            <parciais>" . $jogo->parciais . "</parciais>\n";
 				// se foi woduplo, ambos caem 1 posicao
 				if ($jogo->woduplo==1){
 					$desafiante->nova_posicao($desafiante->posicao + 1);
@@ -162,7 +162,7 @@ class rodada {
 					$desafiado->perdeu();
 					$desafiante->wo();
 					$desafiado->wo();
-					$xml.= "\n<status_jogo>woduplo</status_jogo>";
+					$xml.= "\n<status_jogo>woduplo</status_jogo>\n";
 					$xml.= "</jogo>\n";
 					$desafiante->log_resultado($xml);
 					$desafiado->log_resultado($xml);
@@ -181,7 +181,7 @@ class rodada {
 						$desafiado->perdeu();
 						if ($jogo->desafiante_sets=='W') $desafiado->wo();
 					}
-					$xml.= "\n<status_jogo>ocorrido</status_jogo>
+					$xml.= "\n<status_jogo>ocorrido</status_jogo>\n
 							</jogo>\n";
 					$desafiante->log_resultado($xml);
 					$desafiado->log_resultado($xml);
@@ -201,7 +201,7 @@ class rodada {
 						if ($jogo->desafiante_sets=='W') $desafiado->wo();
 						continue;// proximo jogo a ser computado
 					}
-					$xml.= "\n<status_jogo>desafio</status_jogo>
+					$xml.= "\n<status_jogo>desafio</status_jogo>\n
 								</jogo>\n";
 					$desafiante->log_resultado($xml);
 					$desafiado->log_resultado($xml);
@@ -233,11 +233,12 @@ class rodada {
 	 */
 	public function xml(){
 		@mkdir("files/");
-		$arq = "files/" . $this->ano . "_" . $this->numero . "" . ".xml";
+                $num_rodada = str_pad($this->numero, 2, "0", STR_PAD_LEFT);
+		$arq = "files/" . $this->ano . "_" . $num_rodada . "" . ".xml";
 		$fp = fopen($arq, 'w');
 		$xml = "<ranking>\n";
 		$xml.= "<numero>" . $this->numero . "</numero>\n";
-		$xml.= "<ano>" . $this->ano . "</numero>\n";
+		$xml.= "<ano>" . $this->ano . "</ano>\n";
 		$q = "select id,posicao,ranking from jogador order by ranking desc, posicao";
 		$res = $this->banco->consultar($q);
 		foreach ($res as $r){

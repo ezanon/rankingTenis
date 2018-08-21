@@ -1,0 +1,17 @@
+Correções
+
+OK 0. Renomear arquivos files/*.xml de [ano]_R.xml para [ano]_RR.xml
+
+OK 1. Substituir em files/*.xml 
+    </numero>\n<jogador> por </ano>\n<jogador>
+    ou
+    usar expressao regular {4444}</numero> por {4444}</ano>
+
+2. Em jogadores/*.xml iniciar arquivos com <jogos> e finalizar com </jogos>
+
+3. Substituir em jogadores/*.xml 
+    usar expressao regular {num}</desafiado> por {num}</desafiado_id>
+    e usar expressao regular {num}</desafiante> por {num}</desafiante_id>
+
+4. Criar jogadores/*.xml com DOM
+
