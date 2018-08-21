@@ -13,5 +13,14 @@ class fe{
         $ranking = new ranking();
         return $ranking->listar($categoria);
     }
+    
+    public function showRodadaAtual($categoria){
+        $jogos = new jogos();
+        return $jogos->rodada_atual();
+    }
+    
+    public function showUltimaRodada($categoria){
+        return 'última rodada ' . $categoria; 
+    }
         
 }

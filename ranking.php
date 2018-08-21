@@ -9,7 +9,7 @@
 
 <html>
     
-<div class="container-fluid">
+<div id="menuSuperior" class="container-fluid bg-dark">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="#">Ranking Tênis CEPEUSP</a>
@@ -31,8 +31,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="?module=fe&action=showRanking&id=misto">Ranking</a>
-          <a class="dropdown-item" href="#">Rodada Atual</a>
-          <a class="dropdown-item" href="#">Última Rodada</a>
+          <a class="dropdown-item" href="?module=fe&action=showRodadaAtual&id=misto">Rodada Atual</a>
+          <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=misto">Última Rodada</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -41,8 +41,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="?module=fe&action=showRanking&id=feminino">Ranking</a>
-          <a class="dropdown-item" href="#">Rodada Atual</a>
-          <a class="dropdown-item" href="#">Última Rodada</a>
+          <a class="dropdown-item" href="?module=fe&action=showRodadaAtual&id=feminino">Rodada Atual</a>
+          <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=feminino">Última Rodada</a>
         </div>
       </li>
       <li class="nav-item">
@@ -69,6 +69,14 @@ new controller2();
 ?>    
     
 </div>
+    
+<!-- RODAPE -->
+<footer class="footer bg-dark">
+    <div class="container">
+        <span class="text-muted"><center>2012-2018 :: Erickson Zanon :: ezanon@gmail.com</center></span>
+    </div>
+</footer>
+<!-- RODAPE -->
     
 </html>
 

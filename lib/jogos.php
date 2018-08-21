@@ -20,7 +20,7 @@ class jogos extends jogo {
 		}
 		return true;
 	}
-	
+
 }
 
 ?>

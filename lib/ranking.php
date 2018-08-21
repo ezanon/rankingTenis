@@ -21,14 +21,14 @@ class ranking {
 	}
         
         /*
-Exibe lista dos jogadores	
-*/
+      Exibe lista dos jogadores
+     */
 
-	public function listar($categoria) {
-		$q = "select * from jogador where ranking='$categoria' and ativo=1 order by posicao";
-		$jogadores = $this->banco->consultar($q);
-		$str = '';
-		$str.= "<center><h1>Ranking $categoria</h1></center><table class='table'>
+    public function listar($categoria) {
+        $q = "select * from jogador where ranking='$categoria' and ativo=1 order by posicao";
+        $jogadores = $this->banco->consultar($q);
+        $str = '';
+        $str .= "<center><h1>Ranking $categoria</h1></center><table class='table'>
 					<tr>
 						<th scope=col>Posição</th>
 						<th scope=col>Nome</th>
@@ -42,30 +42,34 @@ Exibe lista dos jogadores
 						<th scope=col>Informações</th>
 					</tr>
 				";
-		foreach ($jogadores as $j){
-                                switch ($j['cor']){
-                                    case 'VERDE':$bgcolor = 'verde';break;
-                                    case 'BRANCO':$bgcolor = 'branco';break;
-                                    case 'AMARELO':$bgcolor = 'amarelo';break;
-                                }
-				$wo = "&nbsp;";
-				if ($j['wo']>0) $wo = $j['wo'];
-                                $str.=" <tr class={$bgcolor} >";
-                                $str.="     <th class=\"jogador_{$j['cor']} row align-middle\">" . $j['posicao'] . "</td>
-							<td class=nome>" . $j['nome_completo'] . "</td>
-                                                        <td>{$j['email']}<br>{$j['telefone_celular']}</td>
-							<td>" . $j['jogos'] . "</td>
-							<td>" . $j['vitorias_total'] . "</td>
-							<td>" . $j['derrotas_total'] . "</td>
-							<td>" . $j['vitorias_consecutivas'] . "</td>
-							<td>" . $j['derrotas_consecutivas'] . "</td>
-							<td class=wo>" . $wo . "</td>
-							<td>" . $j['info'] . "</td>
-						</tr>
-						";
-		}
-		$str.= "</table>";
-		return $str;
-	}
-	
+        foreach ($jogadores as $j) {
+            switch ($j['cor']) {
+                case 'VERDE':$bgcolor = 'verde';
+                    break;
+                case 'BRANCO':$bgcolor = 'branco';
+                    break;
+                case 'AMARELO':$bgcolor = 'amarelo';
+                    break;
+            }
+            $wo = "&nbsp;";
+            if ($j['wo'] > 0)
+                $wo = $j['wo'];
+            $str .= " <tr class={$bgcolor} >";
+            $str .= "     <th class=\"jogador_{$j['cor']} row align-middle\">" . $j['posicao'] . "</td>
+                                <td class=nome>" . $j['nome_completo'] . "</td>
+                                <td>{$j['email']}<br>{$j['telefone_celular']}</td>
+                                <td>" . $j['jogos'] . "</td>
+                                <td>" . $j['vitorias_total'] . "</td>
+                                <td>" . $j['derrotas_total'] . "</td>
+                                <td>" . $j['vitorias_consecutivas'] . "</td>
+                                <td>" . $j['derrotas_consecutivas'] . "</td>
+                                <td class=wo>" . $wo . "</td>
+                                <td>" . $j['info'] . "</td>
+                        </tr>
+                    ";
+        }
+        $str .= "</table>";
+        return $str;
+    }
+
 }
