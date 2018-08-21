@@ -1,0 +1,5 @@
+- exibir ranking, rodada atual e ultima rodada
+
+- xml do ranking gerar tag para separar ranking feminino do misto ao inves de colocar informação com o jogador... e script para corrigir os xml existentes
+
+
