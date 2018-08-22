@@ -15,8 +15,7 @@ class fe{
     }
     
     public function showRodadaAtual($categoria){
-        $jogos = new jogos();
-        return $jogos->rodada_atual();
+        return 'rodada atual ' . $categoria;
     }
     
     public function showUltimaRodada($categoria){
