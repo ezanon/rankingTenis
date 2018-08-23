@@ -12,6 +12,10 @@ class quadra {
 	}
 	
 	function info($id){
+            if ($id==0){
+                $this->nome = 'Jogo Possível';
+                return false;
+            }
 		$q = "select * from quadras where id=$id";
 		$infos = $this->banco->consultar($q);
 		foreach ($infos as $info){

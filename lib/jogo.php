@@ -25,7 +25,10 @@ class jogo{
 		return true;
 	}
 	
-	function info($id,$rodada = 'rodada_atual'){
+	function info($id,$rodada = false){
+                if (!$rodada) {
+                    $rodada = 'rodada_atual';
+                }
 		$q = "select * from $rodada where id=$id limit 1";
 		$jogo = $this->banco->consultar($q);
 		foreach ($jogo as $j){
