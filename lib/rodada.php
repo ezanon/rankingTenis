@@ -12,7 +12,7 @@ class rodada {
 	public $nome;
 	public $confirmada;
 
-	public function __construct($id = 1) {
+	public function __construct($id = 1) {  //id 1 é rodada atual, id 2 é ultima rodada
             $this->banco = banco::instanciar();
             $q = "select * from rodada_controle where id=$id limit 1";
             $res = $this->banco->consultar($q);
@@ -254,6 +254,28 @@ class rodada {
 		return true;
 	}
 
+        public function getAtual(){
+            $this->get(1);
+            return true;
+        }
+        
+        public function getUltima(){
+            $this->get(0);
+            return true;
+        }
+        
+        public function get($rodada){
+            $confirmada = ($rodada=='rodada_atual') ? 1 : 0;
+            $q = "select * from rodada_controle where confirmada=$confirmada";
+            $res = $this->banco->consultar($q);
+            foreach ($res as $r){
+                foreach ($r as $key=>$val){
+                    $this->$key = $val;
+                }
+                break;
+            }
+            return true;
+        }
 }
 
 ?>

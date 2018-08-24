@@ -34,7 +34,7 @@ class jogos extends jogo {
             if ($categoria){
                 $where = "where ranking='$categoria'";
             }
-            $q = "select id from $rodada $where order by confirmado desc, quadra, desafiante_posicao";
+            $q = "select id from $rodada $where order by confirmado desc, quadra, ranking, desafiante_posicao";
             $lista = $this->banco->consultar($q);
             foreach ($lista as $par){
                 $ids[] = $par['id'];
