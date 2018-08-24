@@ -1,5 +1,7 @@
 <?php
 
+$version = '1.6.0';
+
 require('config.php');
 
 session_start();

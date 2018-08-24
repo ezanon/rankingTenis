@@ -12,7 +12,7 @@
 <div id="menuSuperior" class="container-fluid bg-dark">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Ranking Tênis CEPEUSP</a>
+  <a class="navbar-brand text-warning" href="#">Ranking Tênis CEPEUSP</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -20,7 +20,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="?module=fe&action=showRodadaAtual&id=misto">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Regulamento</a>
@@ -45,13 +45,13 @@
           <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=feminino">Última Rodada</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Login</a>
-      </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Busque um jogador" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      <!--<input class="form-control mr-sm-2" type="search" placeholder="Busque um jogador" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>-->
+      <ul class="navbar-nav mr-auto"><li class="nav-item">
+        <a class="nav-link disabled text-warning" href="/admin.php">Login</a>
+      </li></ul>
     </form>
   </div>
 </nav>    
@@ -73,7 +73,7 @@ new controller2();
 <!-- RODAPE -->
 <footer class="footer bg-dark">
     <div class="container">
-        <span class="text-muted"><center>2012-2018 :: Erickson Zanon :: ezanon@gmail.com</center></span>
+        <span class="text-muted"><center>© 2012-<?php echo date('Y'); ?> :: Erickson Zanon :: ezanon@gmail.com</center></span>
     </div>
 </footer>
 <!-- RODAPE -->
