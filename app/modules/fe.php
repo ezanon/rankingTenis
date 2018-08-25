@@ -14,12 +14,12 @@ class fe{
         return $ranking->listar($categoria);
     }
     
-    public function showRodadaAtual($categoria){
+    public function showRodadaAtual($categoria=false){
         return $categoria;
     }
     
-    public function showUltimaRodada($categoria){
-        return 'última rodada ' . $categoria; 
+    public function showUltimaRodada($categoria=false){
+        return $categoria; 
     }
         
 }

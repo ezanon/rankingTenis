@@ -2,8 +2,12 @@
 
 $categoria = $data;
 
+if (!$categoria) $categoria = 'misto';
+
+$rodadanome = 'rodada_atual';
+
 $jogos = new jogos();
-$idsJogos = $jogos->get_ids('rodada_atual');
+$idsJogos = $jogos->get_ids($rodadanome);
 
 $rodada = new rodada(1);
 echo "<center><h1>{$rodada->nome}</h1></center>";
@@ -12,7 +16,7 @@ echo "<center><h4>{$rodada->data}</h4></center>";
 $linhas = '';
 foreach ($idsJogos as $id){
     $jogo = new jogo();
-    $jogo->get($id,'rodada_atual');
+    $jogo->get($id,$rodadanome);
     $quadra = new quadra($jogo->quadra);
     $linha = array();
     $linha[] = $quadra->nome;

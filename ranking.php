@@ -20,7 +20,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="?module=fe&action=showRodadaAtual&id=misto">Home</a>
+        <a class="nav-link" href="?module=fe&action=showRodadaAtual">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Regulamento</a>
