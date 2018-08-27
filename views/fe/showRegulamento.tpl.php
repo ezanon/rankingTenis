@@ -1,4 +1,4 @@
-<div id="regulamento" class="container">
+<div class="container">
 
 <div class="card">
   <div class="card-header">
@@ -12,5 +12,5 @@
     <a href="docs/Regulamento-oficial-RANKING-2017.pdf" class="btn btn-primary">Clique aqui para abrir o arquivo.</a>
   </div>
 </div>
-
+    
 </div>

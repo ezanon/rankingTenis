@@ -9,6 +9,10 @@ class fe{
             return NULL;
     }
     
+    public function showHome(){
+        return true;
+    }
+    
     public function showRanking($categoria){
         $ranking = new ranking();
         return $ranking->listar($categoria);

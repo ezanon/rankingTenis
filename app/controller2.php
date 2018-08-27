@@ -14,6 +14,7 @@ class controller2{
 				$data = $model->$action();
 			$view->load($module,$action,$data);
 		}
+                else $view->load('fe','showHome',true);
 		return true;
 	}
 	
