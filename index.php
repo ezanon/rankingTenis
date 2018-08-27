@@ -23,7 +23,7 @@
         <a class="nav-link" href="?module=fe&action=showRodadaAtual">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Regulamento</a>
+        <a class="nav-link" href="?module=fe&action=showRegulamento">Regulamento</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,7 +62,7 @@
 
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', 1);
+//error_reporting(E_ALL); ini_set('display_errors', 1);
 require('bootstrap.php');
 new controller2(); 
 

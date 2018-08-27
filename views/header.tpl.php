@@ -6,5 +6,5 @@
 <title>Ranking Tenis CEPEUSP</title>
 </head>
 <body>
-<div id=all>
+    <div id=all><p><a href="index.php">Ir para portal</a></p>
 <h1>Ranking Tenis CEPEUSP</h1>

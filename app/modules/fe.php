@@ -21,5 +21,9 @@ class fe{
     public function showUltimaRodada($categoria=false){
         return $categoria; 
     }
+    
+    public function showRegulamento(){
+        return true;
+    }
         
 }
