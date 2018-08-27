@@ -1,4 +1,4 @@
 <?php
 global $url;
-header("Refresh: 0; URL=$url");
+header("Refresh: 0; URL=index.php");
 ?>
