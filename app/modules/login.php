@@ -15,20 +15,21 @@ class login {
 		$str = '';
 		// se admin
 		if ($login=='admin'){
-			if ($senha==$config['pass_admin']){
-				$_SESSION['jogador']['id'] = -99;
-				$_SESSION['jogador']['ranking'] = -99;
-				$_SESSION['jogador']['jogador'] = 0;
-				$_SESSION['jogador']['admin'] = 1;
-				$str.= "Bem vindo, ADMININISTRADOR";
-				$_SESSION['acesso_autorizado'] = true;
-			}
-			else {
-				echo "##nao admin senha $senha " . $config['pass_admin'] . " ## ";
-				$str.= 'Acesso não autorizado.';
-				$_SESSION['acesso_autorizado'] = false;
-			}
-			return $str;
+                    if ($this->getAdminPass($senha)){
+                    //if ($senha==$config['pass_admin']){
+                            $_SESSION['jogador']['id'] = -99;
+                            $_SESSION['jogador']['ranking'] = -99;
+                            $_SESSION['jogador']['jogador'] = 0;
+                            $_SESSION['jogador']['admin'] = 1;
+                            $str.= "Bem vindo, ADMININISTRADOR";
+                            $_SESSION['acesso_autorizado'] = true;
+                    }
+                    else {
+                            echo "##nao admin senha $senha " . $config['pass_admin'] . " ## ";
+                            $str.= 'Acesso não autorizado.';
+                            $_SESSION['acesso_autorizado'] = false;
+                    }
+                    return $str;
 		}
 		
 		// se não admin
@@ -58,6 +59,12 @@ class login {
 		$this->banco = NULL;
 		return true;
 	}
+        
+        private function getAdminPass($md5pass){
+            $num = $this->banco->contar('admin','password',"'$md5pass'");
+            if ($num>0) return true;
+            else return false;
+        }
 
 }
 

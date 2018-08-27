@@ -73,7 +73,7 @@ new controller2();
 <!-- RODAPE -->
 <footer class="footer bg-dark">
     <div class="container">
-        <span class="text-muted"><center>© 2012-<?php echo date('Y'); ?> :: Erickson Zanon :: ezanon@gmail.com</center></span>
+        <span class="text-muted"><center>RankingTenis v.<?php echo $version; ?> © 2012-<?php echo date('Y'); ?> :: Erickson Zanon :: ezanon@gmail.com</center></span>
     </div>
 </footer>
 <!-- RODAPE -->

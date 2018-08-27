@@ -1,6 +1,8 @@
 <?php
 
-$version = '1.6.0';
+$version = '2.0.0';
+
+$url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['PHP_SELF'];
 
 require('config.php');
 
