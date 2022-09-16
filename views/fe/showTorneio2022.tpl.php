@@ -3,7 +3,7 @@
 <style type="text/css">
 #iframe-holder {
     overflow:hidden;
-    position: absolute;
+    position: relative;
     top:0px;
     bottom:0px;
     left:0;
