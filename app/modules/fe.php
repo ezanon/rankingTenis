@@ -29,5 +29,9 @@ class fe{
     public function showRegulamento(){
         return true;
     }
+    
+    public function showTorneio2022(){
+        return true;
+    }
         
 }
