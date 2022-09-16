@@ -1,4 +1,4 @@
-<div id="torneio" class="container">
+<div id="torneio" class="container-fluid">
     
 <style type="text/css">
 #iframe-holder {
@@ -14,6 +14,18 @@
     height:100%;
  }
 </style>
+
+<div class="card">
+  <div class="card-header">
+    Torneio 2022
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Clique no link abaixo para acessar a agenda e chaves do torneio.</h5>
+    <p class="card-text">
+        <a target="_blank" href="https://docs.google.com/spreadsheets/d/1K0-ifScGRJD-jRfVRiWbHepmMipRUEx3/edit?usp=sharing&ouid=101343888583349103051&rtpof=true&sd=true" class="btn btn-primary">Clique aqui!</a>
+    </p>
+  </div>
+</div>
 
 <div id="iframe-holder">
     <iframe src="https://docs.google.com/spreadsheets/d/1K0-ifScGRJD-jRfVRiWbHepmMipRUEx3/edit?usp=sharing&ouid=101343888583349103051&rtpof=true&sd=true" frameborder="0"  name="main" scrolling="no"></iframe>
