@@ -7,7 +7,7 @@
   <div class="card-body">
     <h5 class="card-title">Torneio Interno Individual de Tênis - 2022</h5>
     <p class="card-text">
-        Clique aqui para visualizar as chaves e agenda do Torneio
+        <a href=https://docs.google.com/spreadsheets/d/1K0-ifScGRJD-jRfVRiWbHepmMipRUEx3/edit?usp=sharing&ouid=101343888583349103051&rtpof=true&sd=true target="_blank>"Clique aqui para visualizar as chaves e agenda do Torneio</a>
     </p>
   </div>
 </div>
