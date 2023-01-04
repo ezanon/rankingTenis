@@ -12,7 +12,7 @@
 <div id="menuSuperior" class="container-fluid bg-dark">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand text-warning" href="#">Ranking Tênis CEPEUSP</a>
+  <a class="navbar-brand text-warning" href="#">Ranking Tênis CEPEUSP <?php require_once('config.php'); if ($dev) echo '(DEV)'; ?></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

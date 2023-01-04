@@ -7,7 +7,7 @@ if (@$_SESSION['acesso_autorizado']){
 	
 ?>
 <form id="form1" name="form1" method="post" action="">
-  <label>login
+  <label>loginn
   <input type="text" name="login" id="login" />
   </label>
   <p>

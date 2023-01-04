@@ -2,18 +2,6 @@
 
 <div class="card">
   <div class="card-header">
-    Participe
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">Torneio Interno Individual de Tênis - 2022</h5>
-    <p class="card-text">
-        Clique aqui para visualizar as chaves e agenda do Torneio
-    </p>
-  </div>
-</div>
-    
-<div class="card">
-  <div class="card-header">
     Importante
   </div>
   <div class="card-body">

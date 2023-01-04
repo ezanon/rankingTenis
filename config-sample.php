@@ -1,5 +1,7 @@
 <?php
 
+$dev = false;
+
 $config = array(
 	'driver' => 'mysql',
 	'host' => 'localhost',
@@ -7,5 +9,3 @@ $config = array(
 	'user' => 'developer',
 	'pass' => 'developer'
 );
-
-?>
