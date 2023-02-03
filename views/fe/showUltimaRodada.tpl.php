@@ -17,9 +17,12 @@ $linhas = '';
 foreach ($idsJogos as $id){
     $jogo = new jogo();
     $jogo->get($id,$rodadanome);
-    $quadra = new quadra($jogo->quadra);
+    $quadra = new quadra($jogo->quadra); 
     $linha = array();
-    $linha[] = $quadra->nome;
+    if ($jogo->vizinho==-1)
+        $linha[] = 'Jogo Vizinhos';
+    else 
+        $linha[] = $quadra->nome;
     if ($jogo->desafio==1) $desafio = ' (desafio)'; else $desafio = '';
     $linha[] = $jogo->ranking . $desafio;
     $desafiante = new jogador($jogo->desafiante);

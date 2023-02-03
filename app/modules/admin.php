@@ -98,14 +98,19 @@ Exibe os jogos que podem acontecer na próxima rodada
 			$possiveis = false;
 			if (!$desafios) // desafios e bonus já decididos, aí mostra jogos possiveis
 				$possiveis = $this->jogos_possiveis($r);
-			if ($desafios)
+			if ($desafios) 
 				$str.= $desafios;
 			if ($possiveis)
 				$str.= $possiveis;
 			if ((!$desafios) && (!$possiveis)) 
-				$confirmar++;
-			$str.= $this->jogos_confirmados($r,1);
-			$str.= $this->jogos_confirmados($r,0);
+				$confirmar++; // soma 1 a cada ranking
+			$str.= $this->jogos_confirmados($r,1); // jogos agendados 
+			$str.= $this->jogos_confirmados($r,0); // jogos possíveis 
+                        if ($confirmar>=1){ // o ranking que já tiver todos os jogos confirmados, exibe os jogos entre vizinhos
+                            $this->jogos_vizinhos($r);
+                            $str.= $this->jogos_confirmados($r,-1); // jogos entre vizinhos
+                        }    
+                        //$str.= "<p>jogos vizinhos:<br><br>" . $this->jogos_vizinhos($r) . "</p>";
 			if (($possiveis) && (!$desafios)) $btn_conf_todos++;  // só há possiveis, incrementa btão... se btão 2 então será exibido, pois em misto e feminino só há possíveis
 			$str.= "</div>\n";
 		}
@@ -343,7 +348,104 @@ Exibe lista dos jogos possíveis para a rodada baseado nas cores branco e verde
 		if ($i==0) $str = '';
 		return $str;	
 	}
-	
+        
+        /*
+         * Cria jogos entre vizinhos (mesma cor) que não têm jogos agendados ou possíveis
+         */
+        public function jogos_vizinhos($ranking) {
+            // verifica se os jogos entre vizinhos já foram sugeridos
+            $q = "select count(*) as num from nova_rodada where ranking='$ranking' and vizinho=-1";
+            $numjogos = $this->banco->consultar($q);
+            $saida = '';
+            if ($numjogos[0]['num'] == 0){ // cria jogos
+                // seleciona jogadores do ranking sem jogo na rodada
+                $ids = $this->jogadores_sem_jogo($ranking);
+
+                //echo "<p>ranking $ranking</p>\n";
+
+                
+                $i=0;
+                foreach ($ids as $id){
+                    $i++;
+                    if ($i==1) { // o primeiro da lista nunca será o desafiante
+                        $id_anterior = $id;
+                        continue; 
+                    }
+                    $desafiado = new jogador($id_anterior);
+                    $desafiante = new jogador($id);
+                    
+                    /*echo "<br>"
+                            . "{$desafiado->id} P {$desafiado->posicao} ({$desafiado->cor})   x "
+                            . "{$desafiante->id} P {$desafiante-> posicao} ({$desafiante->cor})    ";*/
+                    
+                    if ($desafiado->posicao==1){ //primeiro do ranking nunca será desafiado por vizinho
+                        $id_anterior = $id;
+                        $desafiado = null;
+                        $desafiante = null;
+                        continue;
+                    }
+                    // verifica se há jogadores com jogos agendados entre ambos
+                    // não pode haver jogos entre vizinhos se há jogos entre ambos
+                    if ($this->jogos_entre_posicoes($desafiado->posicao, $desafiante->posicao, $ranking) > 0){ 
+                        $id_anterior = $id;
+                        $desafiado = null;
+                        $desafiante = null;
+                        continue;
+                    }
+                    // confirma se desafiado não tem jogo marcado mesmo
+                    // pode ser que já tenha entrado num jogo entre vizinhos
+                    if ($desafiado->jogo_agendado==1){
+                        $id_anterior = $id;
+                        $desafiado = null;
+                        $desafiante = null;
+                        continue;
+                    }
+                    // verifica se são da mesma cor
+                    // se for branco x verde não vai marcar 
+                    // pra ativar branco x verde basta comentar essa condição
+                    if ($desafiado->cor != $desafiante->cor){
+                        $id_anterior = $id;
+                        $desafiado = null;
+                        $desafiante = null;
+                        continue;
+                    }                
+                    // agenda o jogo
+                    $this->marcar_jogo($desafiante->id, $desafiado->id,0,0,-1); // último parâmetro 1 é flag vizinho
+                    
+                    //echo 'MARCADO';
+                    
+                    //$saida.= "{$desafiante->posicao}[{$desafiante->id}]({$desafiante->cor}) x {$desafiado->posicao}[{$desafiado->id}]({$desafiado->cor}) <br>\n";  
+                    $id_anterior = $id;
+                }
+            }    
+            return $saida;
+        }
+        /*
+         * Verifica se há jogadores com jogos agendados entre 2 jogadores no rankeamento para jogos entre vizinhos
+         */
+        public function jogos_entre_posicoes($p1,$p2,$r){
+            $q = "select count(*) as contador from jogador where jogo_agendado=1 and (posicao between $p1 and $p2) and ranking='$r' and ativo=1";
+            $res = $this->banco->consultar($q);
+            return $res[0]['contador'];
+        }
+        
+        /*
+         * Devolve ids dos jogadores sem jogo na rodada para gerar jogos entre vizinhos
+         */
+	public function jogadores_sem_jogo($ranking){
+            $q = "select id from jogador where jogo_agendado=0 and ativo=1 and cor!='AMARELO' and ranking='$ranking' order by posicao";
+            $jogadores_disponiveis = $this->banco->consultar($q); 
+            if ($jogadores_disponiveis){ 
+                $ids = array();
+                foreach ($jogadores_disponiveis as $j){
+                    $ids[] = $j['id'];
+                }
+                return $ids; // array com os ids dos jogadores disponíveis pra jogos entre vizinhos
+            }
+            else {
+                return false;
+            }
+        }
 /* 
 	Função que dá o bônus ao jogador ou confirma desafio
 */
@@ -371,7 +473,7 @@ Exibe lista dos jogos possíveis para a rodada baseado nas cores branco e verde
 /* 
 	Função que marca jogo possível
 */
-	public function marcar_jogo($desafiante_id = null, $desafiado_id = null, $quadra_id = 0, $desafio = 0){
+	public function marcar_jogo($desafiante_id = null, $desafiado_id = null, $quadra_id = 0, $desafio = 0, $vizinho = 0){
 		
 		if (!$desafiante_id) $desafiante_id = $_POST['desafiante'];
 		if (!$desafiado_id) $desafiado_id = $_POST['desafiado'];
@@ -379,21 +481,22 @@ Exibe lista dos jogos possíveis para a rodada baseado nas cores branco e verde
 		
 		$desafiante = new jogador($desafiante_id);
 		$desafiado = new jogador($desafiado_id);
-		//echo 'HEY JUDE ' + $quadra_id;
 		$confirmado = 0; // se tem quadra, fica 1
 		if ($quadra_id != 0){ // marca quadra escolhida como ocupada
 			$quadra = new quadra($quadra_id);
 			$quadra->ocupar();
 			$confirmado = 1;		
 		}
-		$q = "insert into nova_rodada (desafiante,desafiado,desafio,confirmado,ranking,quadra,desafiante_pos,desafiado_pos) 
-			  values (" . $desafiante->id . "," . $desafiado->id . ",$desafio,$confirmado,'" . $desafiante->ranking . "'," . $quadra_id . "," . $desafiante->posicao . "," . $desafiado->posicao . ")";
+                if ($vizinho==-1){
+                    $confirmado=-1;
+                }
+		$q = "insert into nova_rodada (desafiante,desafiado,desafio,confirmado,ranking,quadra,desafiante_pos,desafiado_pos,vizinho) 
+			  values (" . $desafiante->id . "," . $desafiado->id . ",$desafio,$confirmado,'" . $desafiante->ranking . "'," . $quadra_id . "," . $desafiante->posicao . "," . $desafiado->posicao . "," . $vizinho . ")";
 		$this->banco->executar($q);
 		$q = "update jogador set jogo_agendado=1,pode_desafiar=0 where id=" . $desafiante->id . " or id=" . $desafiado->id; 
 		$this->banco->executar($q);
 		$str = "Jogo Confirmado: " . $desafiante->nome_pos . " X " . $desafiado->nome_pos;
 		return $str;
-		//echo 'HEY JUDE ' . $q;
 	}
 
 
@@ -430,6 +533,8 @@ Jogos marcados
 		$str = "<h3>Jogos Agendados</h3>";
 		if ($confirmado==0)
 			$str = "<h3>Jogos Possíveis</h3>";
+                elseif ($confirmado==-1)
+                    $str = "<h3>Jogos entre Vizinhos</h3>";
 		$str .= "<table>
 					<tr>
 						<th>&nbsp;</th>
@@ -449,8 +554,10 @@ Jogos marcados
 				$quadra = new quadra($jogo['quadra']);
 				$q = $quadra->quadra . "<br>" . $quadra->horario;
 			}
-			else 
+			if ($confirmado==0)
 				$q = "Jogo Possível";
+                        if ($confirmado==-1)
+                                $q = "Jogo Vizinhos";
 			if ($jogo['desafio']==1)
 				$obs = 'Desafio';
 			else $obs = '';
@@ -459,9 +566,9 @@ Jogos marcados
 					<tr>
 						<td><a href=?module=admin&action=apaga_jogo&id=$id_jogo><img src=\"images/delete-icon-16.png\" alt=apagar /></a></td>
 						<td>$i</td>
-						<td>" . $desafiante->nome_pos . "</td>
+                                                <td>{$desafiante->nome_pos}</td>
 						<td> X </td>
-						<td>" . $desafiado->nome_pos . "</td>
+                                                <td>{$desafiado->nome_pos}</td>
 						<td>$q</td>
 						<td>$obs</td>
 					</tr>
@@ -498,7 +605,7 @@ Jogos marcados
 		else { // confirma jogo
 			$q = "delete from rodada_atual"; // limpa tabela
 			$this->banco->executar($q);
-			$q = "insert into rodada_atual (id,desafiante,desafiado,confirmado,desafio,ranking,quadra,desafiante_posicao,desafiado_posicao) select * from nova_rodada"; // copia todos os jogos
+			$q = "insert into rodada_atual (id,desafiante,desafiado,confirmado,desafio,ranking,quadra,desafiante_posicao,desafiado_posicao,vizinho) select * from nova_rodada"; // copia todos os jogos
 			$this->banco->executar($q);
 			$rodada->confirmar();
 			//$q = 'update rodada_atual,jogador set rodada_atual.desafiante_posicao=jogador.posicao where rodada_atual.desafiante=jogador.id'; // adiciona posicao do desafiante
@@ -541,8 +648,11 @@ Jogos marcados
 			$i++;
 			$jogo = new jogo();
 			$jogo->info($j['id'],'rodada_atual');
-			if ($jogo->quadra==0)
+			if ($jogo->quadra==0){
 				$quadra = 'jogo possivel';
+                                if ($jogo->vizinho==-1)
+                                    $quadra = 'jogo vizinhos';
+                        }
 			else {
 				$quadra = new quadra($jogo->quadra);
 				$q = $quadra->nome;
@@ -683,7 +793,7 @@ Jogos marcados
 		$str.= "<table>
 				<tr>
 					<th>Jogo</th>
-					<th>&nbsp;</th>
+					<th>Ranking</th>
 					<th>Quadra</th>
 					<th>Desafiante</th>
 					<th>&nbsp;</th>
@@ -700,8 +810,10 @@ Jogos marcados
 			$i++;
 			$jogo = new jogo();
 			$jogo->info($j['id'],'ultima_rodada');
-			if ($jogo->quadra==0)
+			if (($jogo->quadra==0) and ($jogo->vizinho==0))
 				$quadra = 'jogo possivel';
+                        elseif (($jogo->quadra==0) and ($jogo->vizinho==-1))
+				$quadra = 'jogo vizinhos';
 			else {
 				$quadra = new quadra($jogo->quadra);
 				$q = $quadra->nome;

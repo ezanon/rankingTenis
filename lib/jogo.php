@@ -48,6 +48,7 @@ class jogo{
 			$this->ocorrido = $j['ocorrido'];
 			$this->cancelado = $j['cancelado'];
 			$this->woduplo = $j['woduplo'];
+                        $this->vizinho = $j['vizinho'];
 		}
 		return true;
 	}
