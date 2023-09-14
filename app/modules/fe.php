@@ -33,5 +33,9 @@ class fe{
     public function showTorneio2022(){
         return true;
     }
+    
+    public function showTorneio(){
+        return true;
+    }
         
 }
