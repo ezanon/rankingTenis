@@ -7,4 +7,4 @@
 </head>
 <body>
     <div id=all><p><a href="index.php">Ir para portal</a></p>
-<h1>Ranking Tenis CEPEUSP <?php require_once('config.php'); if ($dev) echo '(DEV)'; ?></h1>
+<h1>Ranking Tenis CEPEUSP <?php require_once('config.php'); global $dev; if ($dev) echo '(DEV)'; ?></h1>
