@@ -12,6 +12,10 @@ class admin {
 //			$url .= "?module=jogador&action=listar";
 //			header("Refresh: 0; URL=$url");
 //		}
+            
+		$menu = new menu;
+		echo $menu->imprimir();
+            
 		$this->banco = banco::instanciar();
 		return NULL;
 	}
