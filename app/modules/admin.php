@@ -12,10 +12,11 @@ class admin {
 //			$url .= "?module=jogador&action=listar";
 //			header("Refresh: 0; URL=$url");
 //		}
-            
-		$menu = new menu;
-		echo $menu->imprimir();
-            
+                if ($dev){
+                    echo '<pre>SESSAO';
+                    echo print_r($_SESSION);
+                    echo '</pre>';            
+                }       
 		$this->banco = banco::instanciar();
 		return NULL;
 	}

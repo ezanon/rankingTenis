@@ -7,7 +7,9 @@ require_once('config.php');
 //$url = 'https://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['PHP_SELF'];
 $url = $url . $_SERVER['PHP_SELF'];
 
+session_name("RANKINGTENISCEPEUSP");
 session_start();
+
 
 function appload($classe) {
 	$dir = dirname(__FILE__);
