@@ -45,9 +45,9 @@
           <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=feminino">Última Rodada</a>
         </div>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link" href="?module=fe&action=showTorneio">TORNEIO <?php echo $torneio_ano;?></a>
-      </li>
+      </li>-->
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <!--<input class="form-control mr-sm-2" type="search" placeholder="Busque um jogador" aria-label="Search">
