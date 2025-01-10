@@ -6,6 +6,7 @@ class admin {
 	public $confirma_todos_possiveis = false;
 	
 	function __construct(){
+            global $dev;
 // comentei pois não estava listando em celular
 //		if (!$_SESSION['jogador']['admin']){ // se não é admin, mas tentou acessar admin, retorna a página de jogadores
 //			global $url;

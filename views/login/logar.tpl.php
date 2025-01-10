@@ -1,10 +1,12 @@
 <?php
 
-global $url;
+global $url, $dev;
 
-        echo '<pre>SESSAO';
-        echo print_r($_SESSION);
-        echo '</pre>';   
+if ($dev){
+    echo '<pre>SESSAO';
+    echo print_r($_SESSION);
+    echo '</pre>';   
+}
 
 if (!$_SESSION['acesso_autorizado']) {
 	echo "<p>" . $data . "</p>";
