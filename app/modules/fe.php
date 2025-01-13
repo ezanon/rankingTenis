@@ -37,5 +37,28 @@ class fe{
     public function showTorneio(){
         return true;
     }
+    
+    /*
+     * tela de login para o frontend
+     */
+    public function meuRanking(){
+        return true;
+    }
+    
+    /*
+     * realiza o login no frontend
+     */
+    public function feLogin(){
+        return true;
+    }
+    
+     /*
+     * opções para o jogador
+     */
+    public function meuRankingOpcoes(){
+        return true;
+    }
+    
+    
         
 }

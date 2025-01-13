@@ -1,3 +1,12 @@
+<?php
+session_name("RANKINGTENISCEPEUSP");
+session_start();
+require('bootstrap.php');
+if ($dev){
+    error_reporting(E_ALL); 
+    ini_set('display_errors', 1);
+}
+?>  
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -45,6 +54,9 @@
           <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=feminino">Última Rodada</a>
         </div>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="?module=fe&action=meuRanking">Meu Ranking</a>
+      </li>
       <!--<li class="nav-item">
         <a class="nav-link" href="?module=fe&action=showTorneio">TORNEIO <?php echo $torneio_ano;?></a>
       </li>-->
@@ -52,25 +64,28 @@
     <form class="form-inline my-2 my-lg-0">
       <!--<input class="form-control mr-sm-2" type="search" placeholder="Busque um jogador" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>-->
-      <ul class="navbar-nav mr-auto"><li class="nav-item">
-        <a class="nav-link disabled text-warning" href="ranking.php">Login</a>
-      </li></ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link disabled text-warning" href="ranking.php">Admin</a>
+        </li>
+      </ul>
     </form>
   </div>
 </nav>    
     
 </div>    
     
-<div id="main" class="container-fluid">
-
-<?php
-
-//error_reporting(E_ALL); ini_set('display_errors', 1);
-require('bootstrap.php');
-new controller2(); 
-
-?>    
+<div id="main" class="container-fluid">  
     
+<?php
+//if ($dev){
+//    echo '<pre>SESSAO';
+//    echo print_r($_SESSION);
+//    echo '</pre>';   
+//}
+new controller2(); 
+?>
+  
 </div>
     
 <!-- RODAPE -->

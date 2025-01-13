@@ -7,19 +7,22 @@ class admin {
 	
 	function __construct(){
             global $dev;
-// comentei pois não estava listando em celular
-//		if (!$_SESSION['jogador']['admin']){ // se não é admin, mas tentou acessar admin, retorna a página de jogadores
-//			global $url;
-//			$url .= "?module=jogador&action=listar";
-//			header("Refresh: 0; URL=$url");
-//		}
-                if ($dev){
-                    echo '<pre>SESSAO';
-                    echo print_r($_SESSION);
-                    echo '</pre>';            
-                }       
-		$this->banco = banco::instanciar();
-		return NULL;
+//            if ($dev){
+//                echo '<pre>SESSAO';
+//                echo print_r($_SESSION);
+//                echo '</pre>';            
+//            }  
+
+            if (!$_SESSION['jogador']['admin']){ // se não é admin, mas tentou acessar admin, retorna a página de jogadores
+                    global $url;
+                    $url .= "?module=jogador&action=listar";
+                    header("Refresh: 0; URL=$url");
+            }
+//            	$menu = new menu;
+//		echo $menu->imprimir();
+
+            $this->banco = banco::instanciar();
+            return NULL;
 	}
 	
 	function listagem() {

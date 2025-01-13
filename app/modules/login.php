@@ -10,8 +10,8 @@ class login {
 	
 	public function logar(){
 		global $config;
-		$login = $_POST['login'];
-		$senha = md5($_POST['senha']);
+                $login = filter_input(INPUT_POST, 'login', FILTER_DEFAULT);
+                $senha = md5(filter_input(INPUT_POST, 'senha', FILTER_DEFAULT));
 		$str = '';
 		// se admin
 		if ($login=='admin'){
@@ -26,7 +26,7 @@ class login {
                     }
                     else {
                             echo "##nao admin senha $senha " . $config['pass_admin'] . " ## ";
-                            $str.= 'Acesso não autorizado.';
+                            $str.= 'Acesso não autorizado, '. $login;
                             $_SESSION['acesso_autorizado'] = false;
                     }
                     return $str;
@@ -35,7 +35,7 @@ class login {
 		// se não admin
 		$info = $this->banco->ver('jogador','id,nome_completo,admin,jogador,ranking',"login='$login' and senha='$senha'");
 		if (!$info) {
-			$str.= 'Acesso não autorizado.';
+			$str.= 'Acesso não autorizado, '. $login;
 			$_SESSION['acesso_autorizado'] = false;
 		}
 		else {
