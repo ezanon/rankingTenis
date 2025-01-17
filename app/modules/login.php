@@ -45,7 +45,7 @@ class login {
 				$_SESSION['jogador']['jogador'] = $j['jogador'];
 				$_SESSION['jogador']['admin'] = $j['admin'];
 				$str.= "Bem vindo, " . $j['nome_completo'];
-				if ($_SESSION['admin']==1)
+				if ($_SESSION['jogador']['admin']==1)
 					$str.= " <strong>(admin)</strong>";
 				$_SESSION['acesso_autorizado'] = true;
 				break;
