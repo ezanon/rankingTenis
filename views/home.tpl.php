@@ -1,13 +1,13 @@
 <?php
-if (@$_SESSION['acesso_autorizado']){
+if (($_SESSION['acesso_autorizado']) and ($_SESSION['admin']!=1)){
 	global $url;
-	$url .= "?module=jogador&action=listar";
+	$url .= "?module=admin&action=listagem";
 	header("Refresh: 0; URL=$url");
 }
 	
 ?>
 <form id="form1" name="form1" method="post" action="">
-  <label>loginn
+  <label>login
   <input type="text" name="login" id="login" />
   </label>
   <p>

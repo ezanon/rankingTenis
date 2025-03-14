@@ -15,12 +15,15 @@
     
     <div class="p-3 border rounded mb-3 text-center">
         <?php 
-            echo '<h5 class="text-center mb-4">' . $j->nome_completo . '</h5>';
+            echo '<h5 class="text-center mb-2">' . $j->nome_completo . '</h5>';
+            if ($j->admin==1) {
+                echo '<span class="badge badge-pill mr-2 badge-dark">Admin</span>';
+            }
             if ($j->misto==1) {
-                echo '<span class="badge badge-pill badge-success">Categoria Misto</span>';
+                echo '<span class="badge badge-pill mr-2 badge-success">Categoria Misto</span>';
+                $space = ' ';
             }
             if ($j->feminino==1) {
-                if ($j->misto==1) echo ' ';
                 echo '<span class="badge badge-pill badge-warning">Categoria Feminino</span>';
             }
         ?>       

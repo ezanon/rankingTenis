@@ -1,3 +1,9 @@
+<?php
+
+if (@!$_SESSION['acesso_autorizado']){
+
+?>
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
             <h3 class="text-center mb-4">Login</h3>
@@ -17,4 +23,13 @@
             </div>-->
         </div>
     </div>
+
+<?php
+}
+else {
+    global $url;
+    echo 'Redirecionando...';
+    $url .= "?module=fe&action=meuRankingOpcoes";
+    header("Refresh: 0; URL=$url");
+}
 

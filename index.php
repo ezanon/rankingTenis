@@ -54,9 +54,6 @@ if ($dev){
           <a class="dropdown-item" href="?module=fe&action=showUltimaRodada&id=feminino">Última Rodada</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="?module=fe&action=meuRanking">Meu Ranking</a>
-      </li>
       <!--<li class="nav-item">
         <a class="nav-link" href="?module=fe&action=showTorneio">TORNEIO <?php echo $torneio_ano;?></a>
       </li>-->
@@ -66,8 +63,14 @@ if ($dev){
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>-->
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link disabled text-warning" href="ranking.php">Admin</a>
+          <a class="nav-link disabled text-warning" href="?module=fe&action=meuRanking">Meu Ranking</a>
         </li>
+        <?php
+        if (($_SESSION['acesso_autorizado']) and ($_SESSION['jogador']['admin']==1)){?>
+            <li class="nav-item">
+              <a class="nav-link disabled text-warning" href="ranking.php">Admin</a>
+            </li>
+        <?php } ?>
       </ul>
     </form>
   </div>
