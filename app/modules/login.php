@@ -32,25 +32,25 @@ class login {
                     return $str;
 		}
 		
-		// se não admin
-		$info = $this->banco->ver('jogador','id,nome_completo,admin,jogador,ranking',"login='$login' and senha='$senha'");
-		if (!$info) {
-			$str.= 'Acesso não autorizado, '. $login;
-			$_SESSION['acesso_autorizado'] = false;
-		}
-		else {
-			foreach ($info as $j){	
-				$_SESSION['jogador']['id'] = $j['id'];
-				$_SESSION['jogador']['ranking'] = $j['ranking'];
-				$_SESSION['jogador']['jogador'] = $j['jogador'];
-				$_SESSION['jogador']['admin'] = $j['admin'];
-				$str.= "Bem vindo, " . $j['nome_completo'];
-				if ($_SESSION['jogador']['admin']==1)
-					$str.= " <strong>(admin)</strong>";
-				$_SESSION['acesso_autorizado'] = true;
-				break;
-			}
-		}
+                $id = $this->loginJogador($login, $senha);
+                if ($id){
+                    $j = new jogador($id);
+                    $_SESSION['jogador']['id'] = $id;
+                    $_SESSION['jogador']['nome'] = $j->nome_completo;
+                    $_SESSION['jogador']['admin'] = $j->admin;
+                    $_SESSION['jogador']['misto'] = $j->misto;
+                    $_SESSION['jogador']['feminino'] = $j->feminino;
+                    
+                    $str.= "Bem vindo, " . $j->nome_completo;
+                    if ($j->admin==1)
+                            $str.= " <strong>(admin)</strong>";
+                    $_SESSION['acesso_autorizado'] = true;
+                }
+                else {
+                    $str.= 'Acesso não autorizado, '. $login;
+                    $_SESSION['acesso_autorizado'] = false;
+                }
+                
 		return $str;
 	}
 	
@@ -64,6 +64,15 @@ class login {
             $num = $this->banco->contar('admin','password',"'$md5pass'");
             if ($num>0) return true;
             else return false;
+        }
+        
+        public function loginJogador($login,$senha) {
+            // Monta a query para buscar o ID do jogador
+            $q = "SELECT id FROM jogador WHERE login = ? AND senha = ? LIMIT 1";
+            // Executa a consulta usando parâmetros seguros
+            $res = $this->banco->consultar($q, [$login, $senha]);
+            // Retorna o ID do jogador se encontrado, caso contrário retorna null
+            return !empty($res) ? $res[0]['id'] : false;
         }
 
 }

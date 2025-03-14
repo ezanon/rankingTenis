@@ -3,3 +3,25 @@
 - xml do ranking gerar tag para separar ranking feminino do misto ao inves de colocar informação com o jogador... e script para corrigir os xml existentes
 
 
+pontuação
+categorias
+rankear posição inicial
+quadra por ranking jogador 2a 9h até 4a 12h
+jogos por barragem e, posteriormente, categoria
+jogo possível sem ser repetido por 4 semanas
+rcsa (sem agendamento)
+jat (jogos 
+prioridade (chuvas)
+tft (tubos)
+feminino + misto -> disponibilidade
+
+issues
+- anotar disponibilidade
+- atualizar contatos
+- alterar a senha
+
+- script para reorganizar ranking
+
+- gerar jogos
+- anotar resultado
+- fechar rodada

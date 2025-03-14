@@ -29,17 +29,27 @@ class banco {
 		}
 		return $num;
 	}
-	
+        
 	public function executar($sql, $dados = null) {
 		$statement = $this->conexao->prepare($sql);
 		$statement->execute($dados);
+                return $statement;
 	}
 	
-	public function consultar($sql, $dados = null) {
-		$statement = $this->conexao->prepare($sql);
-		$statement->execute($dados);
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
+        public function consultar($sql, $dados = []) {
+            try {
+                $statement = $this->conexao->prepare($sql);
+
+                // Executa a query com parâmetros apenas se houver valores
+                $statement->execute(!empty($dados) ? $dados : null);
+
+                return $statement->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                // Captura erros do banco e retorna uma mensagem
+                return ["erro" => "Erro na consulta: " . $e->getMessage()];
+            }
+        }
+
 
 	public function inserir($tabela, $dados) {
 		foreach($dados as $coluna => $valor) {

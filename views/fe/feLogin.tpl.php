@@ -3,26 +3,24 @@
 global $url, $dev;
 
 $logando = new login();
-echo $logando->logar();
+$str = $logando->logar();
 
 if (!$_SESSION['acesso_autorizado']) {
-	echo "<p>" . $data . "</p>";
+	echo "<p>" . $str . "</p>";
+        session_destroy();
 //	header("Refresh: 3; URL=$url"); 	
 }
 else {
-	echo $data;
-	if ($_SESSION['jogador']['jogador']==1)
-		$url .= "?module=fe&action=meuRankingOpcoes";
-	else if ($_SESSION['jogador']['admin']==1)
-		$url .= "?module=fe&action=meuRankingOpcoes";
-//	header("Refresh: 2; URL=$url");
+	echo $str;
+	$url .= "?module=fe&action=meuRankingOpcoes";
+	header("Refresh: 1; URL=$url");
 }
 
-if ($dev){
-    echo '<pre>SESSAO';
-    echo print_r($_SESSION);
-    echo '</pre>';   
-}
-?>
+//if ($dev){
+//    echo '<p><pre>SESSAO<br>*<br>';
+//    echo var_dump($_SESSION);
+//    echo '*</pre></p>';   
+//}
 
-<a href=?module=fe&action=meuRankingOpcoes>Agora vai</a>
+
+

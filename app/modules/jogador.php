@@ -50,6 +50,11 @@ Obtem informacoes do jogador e grava no objeto
 			$this->info = $r['info'];
 			$this->categoria = $r['categoria'];
 			$this->pode_desafiar = $r['pode_desafiar'];
+                        
+                        $this->disponibilidade = $r['disponibilidade'];
+                        $this->admin = $r['admin'];
+                        $this->misto = $r['categoria_misto'];
+                        $this->feminino = $r['categoria_feminino'];
 		}
 		return true;
 	}

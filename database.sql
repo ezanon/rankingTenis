@@ -28,5 +28,54 @@ ADD COLUMN vitorias_feminino INT DEFAULT 0,
 ADD CONSTRAINT fk_categoria_misto FOREIGN KEY (categoria_misto) REFERENCES categorias(id) ON DELETE SET NULL,
 ADD CONSTRAINT fk_categoria_feminino FOREIGN KEY (categoria_feminino) REFERENCES categorias(id) ON DELETE SET NULL;
 
+ALTER TABLE jogador
+ADD COLUMN pontuacao_misto INT,
+ADD COLUMN pontuacao_feminino INT;
 
+ALTER TABLE jogador
+MODIFY COLUMN pontuacao_misto INT DEFAULT 0,
+MODIFY COLUMN pontuacao_feminino INT DEFAULT 0;
 
+SET @pontos = 0;
+UPDATE jogador j
+JOIN (
+    SELECT id, (@pontos := @pontos + 5) AS nova_pontuacao
+    FROM jogador
+    WHERE ranking = 'misto'
+    ORDER BY posicao DESC
+) AS temp ON j.id = temp.id
+SET j.pontuacao_misto = temp.nova_pontuacao;
+
+SET @pontos = 0;
+UPDATE jogador j
+JOIN (
+    SELECT id, (@pontos := @pontos + 5) AS nova_pontuacao
+    FROM jogador
+    WHERE ranking = 'feminino'
+    ORDER BY posicao DESC
+) AS temp ON j.id = temp.id
+SET j.pontuacao_feminino = temp.nova_pontuacao;
+
+-- Atualizar posicao_misto para jogadores do ranking misto
+UPDATE jogador 
+SET posicao_misto = posicao 
+WHERE ranking = 'misto';
+
+-- Atualizar posicao_feminino para jogadores do ranking feminino
+UPDATE jogador 
+SET posicao_feminino = posicao 
+WHERE ranking = 'feminino';
+
+-- Atualizar categoria_misto para jogadores do ranking misto
+UPDATE jogador 
+SET categoria_misto = 1 
+WHERE ranking = 'misto';
+
+-- Atualizar categoria_feminino para jogadores do ranking feminino
+UPDATE jogador 
+SET categoria_feminino = 1 
+WHERE ranking = 'feminino';
+
+-- Criar coluna sobre disponibilidade
+ALTER TABLE jogador
+ADD COLUMN disponibilidade VARCHAR(255) DEFAULT '0';
