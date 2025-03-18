@@ -36,12 +36,12 @@ class menu {
                                     $str.= " <a href=?module=admin&action=novo_jogador>novo jogador</a> |";
                             }
                             $rodada = NULL;
-
+                            
                     //funcoes
-                    $str.= " <a href=?module=admin&action=funcoes>funcoes</a> |";
+                    $str.= " <a href=?module=admin&action=funcoes>funcoes</a>";                 
                     // sair 
                     $str.= "<a href=?module=login&action=sair>sair</a>
-                                    </menu>";
+                                    </menu>";                 
             }
             return $str;
 	}

@@ -79,3 +79,13 @@ WHERE ranking = 'feminino';
 -- Criar coluna sobre disponibilidade
 ALTER TABLE jogador
 ADD COLUMN disponibilidade VARCHAR(255) DEFAULT '0';
+
+ALTER TABLE jogador
+ADD COLUMN fav_misto INT DEFAULT 0,
+ADD COLUMN fav_feminino INT DEFAULT 0;
+
+ALTER TABLE jogador 
+ADD COLUMN barragem_misto INT DEFAULT 0,
+ADD COLUMN barragem_feminino INT DEFAULT 0,
+ADD COLUMN categoria_misto VARCHAR(20),
+ADD COLUMN categoria_feminino VARCHAR(20);

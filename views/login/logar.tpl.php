@@ -3,7 +3,7 @@
 global $url, $dev;
 
 if (($_SESSION['acesso_autorizado']) and ($_SESSION['admin']!=1)){
-    $url .= "?module=admin&action=listagem";
+    $url .= "ranking.php?module=admin3&action=showRanking&id=misto";
     header("Refresh: 0; URL=$url");
 }
 else {

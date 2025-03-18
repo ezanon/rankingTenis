@@ -66,9 +66,9 @@ if ($dev){
           <a class="nav-link disabled text-warning" href="?module=fe&action=meuRanking">Meu Ranking</a>
         </li>
         <?php
-        if (($_SESSION['acesso_autorizado']) and ($_SESSION['jogador']['admin']==1)){?>
+        if ((@$_SESSION['acesso_autorizado']==1) and ($_SESSION['jogador']['admin']==1)){?>
             <li class="nav-item">
-              <a class="nav-link disabled text-warning" href="ranking.php">Admin</a>
+              <a class="nav-link disabled text-warning" href="ranking.php?module=admin3&action=showRanking&id=misto">Admin</a>
             </li>
         <?php } ?>
       </ul>
