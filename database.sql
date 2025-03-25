@@ -105,3 +105,26 @@ ADD COLUMN ultimosjogos VARCHAR(50) DEFAULT NULL;
 
 ALTER TABLE jogador 
 ADD COLUMN priorizar INT DEFAULT 0;
+
+CREATE TABLE jogos_agendados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jogador1_id INT NOT NULL,
+    jogador2_id INT NOT NULL,
+    horario INT NOT NULL,
+    quadra INT NOT NULL,
+    categoria VARCHAR(20) NOT NULL,
+    vencedor_id INT DEFAULT NULL,  -- ID do jogador vencedor
+    resultado VARCHAR(50) DEFAULT NULL,  -- Ex: "2x1", "WO", "Abandono"
+    parciais VARCHAR(255) DEFAULT NULL,  -- Ex: "6-4, 3-6, 10-8"
+    quem_levou_bola INT DEFAULT 0,  -- ID do jogador que levou a bola
+    observacoes TEXT DEFAULT NULL,  -- Campo para observações gerais
+    data_agendamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE rodada_controle;
+CREATE TABLE rodada_controle (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rodada INT NOT NULL,
+    ano INT NOT NULL,
+    rodada_em_andamento TINYINT(1) NOT NULL DEFAULT 0
+);

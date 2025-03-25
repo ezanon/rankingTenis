@@ -515,47 +515,216 @@ class admin3 {
         return array_values($jogos);
     }
 
-    private function gerarTabelaJogos($jogos) {
-        if (empty($jogos)) {
-            return "<p class='text-center'>Nenhum jogo disponível para exibição.</p>";
-        }
+private function gerarTabelaJogos($jogos) {
+    if (empty($jogos)) {
+        return "<p class='text-center'>Nenhum jogo disponível para exibição.</p>";
+    }
 
-        $this->infosEDesign(); // Carregar configurações de quadras e horários
-        $tabela = "<h3 class='text-center mt-4'>Tabela de Jogos</h3>";
-        $tabela .= "<table class='table table-striped table-bordered text-center'>";
-        $tabela .= "<thead class='thead-dark'>
+    $this->infosEDesign(); // Carregar configurações de quadras e horários
+    $tabela = "<h3 class='text-center mt-4'>Tabela de Jogos</h3>";
+
+    // Criar matriz de controle para verificar horários vazios
+    $jogosMap = [];
+    foreach ($jogos as $jogo) {
+        $jogosMap[$jogo["quadra"]][$jogo["horario"]] = true;
+    }
+
+    // Formulário para envio
+    $tabela .= "<form id='formAgendamento' method='POST' action='?module=admin3&action=confirmarRodada'>";
+
+    $tabela .= "<table class='table table-striped table-bordered text-center'>";
+    $tabela .= "<thead class='thead-dark'>
                     <tr>
                         <th>#</th>
                         <th>Jogador 1</th>
                         <th>Jogador 2</th>
-                        <th>Horário</th>
                         <th>Quadra</th>
+                        <th>Horário</th>
                     </tr>
                 </thead><tbody>";
 
-        $contador = 0;
+    $contador = 0;
+
+    // Percorrer quadras e horários para garantir exibição correta
+    for ($quadra = 1; $quadra <= 5; $quadra++) {
+        for ($horario = 1; $horario <= 5; $horario++) {
+            $encontrado = false;
+
+            foreach ($jogos as $jogo) {
+                if ($jogo["quadra"] == $quadra && $jogo["horario"] == $horario) {
+                    $contador++;
+
+                    // Obter os dados formatados dos jogadores
+                    $jogador = new jogador3();
+                    $jogador1 = $jogador->exibirJogadorComBadges($jogo["jogador1"], $jogo["levarBola"], $jogo["categoria"], true, 2);
+                    $jogador2 = $jogador->exibirJogadorComBadges($jogo["jogador2"], $jogo["levarBola"], $jogo["categoria"]);
+                    $horarioFormatado = $this->horarios[$jogo["horario"]];
+                    $quadraFormatada = "Quadra " . $jogo["quadra"];
+
+                    // Inputs escondidos para enviar os jogos no form
+                    $tabela .= "<input type='hidden' name='jogos[$contador][jogador1]' value='{$jogo["jogador1"]}'>";
+                    $tabela .= "<input type='hidden' name='jogos[$contador][jogador2]' value='{$jogo["jogador2"]}'>";
+                    $tabela .= "<input type='hidden' name='jogos[$contador][horario]' value='{$jogo["horario"]}'>";
+                    $tabela .= "<input type='hidden' name='jogos[$contador][quadra]' value='{$jogo["quadra"]}'>";
+                    $tabela .= "<input type='hidden' name='jogos[$contador][categoria]' value='{$jogo["categoria"]}'>";
+                    $tabela .= "<input type='hidden' name='jogos[$contador][levarBola]' value='{$jogo["levarBola"]}'>";
+
+                    // Montar a linha da tabela
+                    $tabela .= "<tr>
+                                    <td>$contador</td>
+                                    <td>$jogador1</td>
+                                    <td>$jogador2</td>
+                                    <td>$quadraFormatada</td>
+                                    <td>$horarioFormatado</td>
+                                </tr>";
+
+                    $encontrado = true;
+                    break;
+                }
+            }
+
+            // Se nenhum jogo foi encontrado para esse horário/quadra, exibir "Jogo Possível"
+            if (!$encontrado) {
+                $contador++;
+                $tabela .= "<tr class='table-warning'>
+                                <td>$contador</td>
+                                <td colspan='2'><em>Jogo Possível</em></td>
+                                <td>Quadra $quadra</td>
+                                <td>{$this->horarios[$horario]}</td>
+                            </tr>";
+            }
+        }
+    }
+
+    $tabela .= "</tbody></table>";
+
+    // Botões de confirmação
+    $tabela .= "
+        <div class='text-center mt-3'>
+            <button type='submit' name='confirmar_agendados' class='btn btn-success me-2' onclick='return confirmarRodada(\"agendados\")'>Confirmar Agendamento dos Jogos</button>
+            <button type='submit' name='confirmar_possiveis' class='btn btn-warning' onclick='return confirmarRodada(\"possiveis\")'>Confirmar Rodada com Jogos Possíveis</button>
+        </div>
+    ";
+
+    $tabela .= "</form>";
+
+    // JavaScript para exibir o modal de confirmação
+    $tabela .= "
+    <script>
+        function confirmarRodada(tipo) {
+            let mensagem = (tipo === 'agendados') 
+                ? 'Você deseja confirmar o agendamento de todos os jogos?'
+                : 'Você deseja confirmar a rodada apenas com os jogos possíveis?';
+            return confirm(mensagem);
+        }
+    </script>";
+
+    return $tabela;
+}
+
+
+public function confirmarRodada() {
+    $anoAtual = date("Y"); // Obtém o ano atual
+
+    // **Obter rodada e ano atuais**
+    $sqlUltimaRodada = "SELECT rodada, ano FROM rodada_controle WHERE id = 1";
+    $ultimaRodada = $this->banco->consultar($sqlUltimaRodada);
+
+    if ($ultimaRodada) {
+        $ultimoAno = $ultimaRodada[0]["ano"];
+        $ultimaRodadaNum = $ultimaRodada[0]["rodada"];
+    } else {
+        $ultimoAno = $anoAtual;
+        $ultimaRodadaNum = 0;
+    }
+
+    // **Se o ano mudou, iniciar nova contagem, senão incrementar**
+    $novaRodada = ($ultimoAno == $anoAtual) ? $ultimaRodadaNum + 1 : 1;
+
+    // **Se apertou "Confirmar Rodada Apenas com Jogos Possíveis"**
+    if (isset($_POST['confirmar_possiveis'])) {
+        $this->banco->executar("DELETE FROM jogos_agendados");
+
+        // 🔹 Mesmo sem jogos, marcar rodada como "em andamento"
+        $this->banco->executar("UPDATE rodada_controle SET rodada = :rodada, ano = :ano, rodada_em_andamento = 1 WHERE id = 1", [
+            "rodada" => $novaRodada,
+            "ano" => $anoAtual
+        ]);
+
+        return "<div class='card shadow-lg border-warning mt-4'>
+                    <div class='card-body text-center'>
+                        <h4 class='text-warning'><i class='bi bi-exclamation-triangle-fill'></i> Rodada Confirmada</h4>
+                        <p class='text-muted'>A rodada foi confirmada apenas com jogos possíveis. Nenhum jogo foi agendado.</p>
+                    </div>
+                </div>";
+    }
+
+    // **Se apertou "Confirmar Agendamento"**
+    if (isset($_POST['confirmar_agendados'])) {
+        $this->banco->executar("DELETE FROM jogos_agendados"); // Apaga os jogos anteriores
+        $jogos = $_POST['jogos'];
+        $totalJogos = count($jogos);
+        $sucesso = 0;
 
         foreach ($jogos as $jogo) {
-            $contador++;
+            if (empty($jogo["jogador1"]) || empty($jogo["jogador2"]) || empty($jogo["horario"]) || empty($jogo["quadra"])) {
+                continue; // Ignora jogos incompletos
+            }
 
-            // Obter os dados formatados dos jogadores
-            $jogador = new jogador3();
-            $jogador1 = $jogador->exibirJogadorComBadges($jogo["jogador1"], $jogo["levarBola"], $jogo["categoria"], true, 2);
-            $jogador2 = $jogador->exibirJogadorComBadges($jogo["jogador2"], $jogo["levarBola"], $jogo["categoria"]); // Inverter badges no jogador 2
-            $horario = $this->horarios[$jogo["horario"]];
-            $quadra = "Quadra " . $jogo["quadra"];
+            // Query para inserir jogo
+            $sql = "INSERT INTO jogos_agendados (jogador1_id, jogador2_id, horario, quadra, categoria, quem_levou_bola) 
+                    VALUES (:jogador1, :jogador2, :horario, :quadra, :categoria, :quem_levou_bola)";
 
-            // Montar a linha da tabela
-            $tabela .= "<tr>
-                        <td>$contador</td>
-                        <td>$jogador1</td>
-                        <td>$jogador2</td>
-                        <td>$horario</td>
-                        <td>$quadra</td>
-                    </tr>";
+            $params = [
+                "jogador1" => $jogo["jogador1"],
+                "jogador2" => $jogo["jogador2"],
+                "horario" => $jogo["horario"],
+                "quadra" => $jogo["quadra"],
+                "categoria" => $jogo["categoria"],
+                "quem_levou_bola" => $jogo["levarBola"] ?? 0
+            ];
+
+            if ($this->banco->executar($sql, $params)) {
+                $sucesso++;
+            }
         }
 
-        $tabela .= "</tbody></table>";
-        return $tabela;
+        // **Marcar rodada como "em andamento"**
+        $this->banco->executar("UPDATE rodada_controle SET rodada = :rodada, ano = :ano, rodada_em_andamento = 1 WHERE id = 1", [
+            "rodada" => $novaRodada,
+            "ano" => $anoAtual
+        ]);
+
+        // **Mensagem de retorno**
+        if ($sucesso > 0) {
+            return "<div class='card shadow-lg border-success mt-4'>
+                        <div class='card-body text-center'>
+                            <h4 class='text-success'><i class='bi bi-check-circle-fill'></i> Rodada Agendada</h4>
+                            <p class='text-muted'>$sucesso de $totalJogos jogos foram agendados com sucesso!</p>
+                        </div>
+                    </div>";
+        } else {
+            return "<div class='card shadow-lg border-danger mt-4'>
+                        <div class='card-body text-center'>
+                            <h4 class='text-danger'><i class='bi bi-x-circle-fill'></i> Nenhum Jogo Agendado</h4>
+                            <p class='text-muted'>Verifique os dados e tente novamente.</p>
+                        </div>
+                    </div>";
+        }
     }
+
+    return "<div class='card shadow-lg border-danger mt-4'>
+                <div class='card-body text-center'>
+                    <h4 class='text-danger'><i class='bi bi-x-circle-fill'></i> Erro inesperado</h4>
+                    <p class='text-muted'>Tente novamente mais tarde.</p>
+                </div>
+            </div>";
+}
+
+
+
+
+
+
+
 }
