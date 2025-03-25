@@ -92,4 +92,16 @@ ADD COLUMN categoria_feminino VARCHAR(20),
 ADD COLUMN barragem_misto INT DEFAULT 0,
 ADD COLUMN barragem_feminino INT DEFAULT 0;
 
+ALTER TABLE jogador 
+ADD COLUMN pontuacao_inicial_misto INT DEFAULT 0,
+ADD COLUMN pontuacao_inicial_feminino INT DEFAULT 0;
 
+UPDATE jogador 
+SET pontuacao_inicial_misto = pontuacao_misto,
+    pontuacao_inicial_feminino = pontuacao_feminino;
+
+ALTER TABLE jogador 
+ADD COLUMN ultimosjogos VARCHAR(50) DEFAULT NULL;
+
+ALTER TABLE jogador 
+ADD COLUMN priorizar INT DEFAULT 0;

@@ -10,6 +10,7 @@ header("Pragma: no-cache"); // Diretiva para HTTP 1.0
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="estilos.css">
 </head> 
 
@@ -43,7 +44,11 @@ header("Pragma: no-cache"); // Diretiva para HTTP 1.0
       </li>
         
       <li class="nav-item">
-        <a class="nav-link" href="?module=admin3&action=prepararNovaRodada">Nova Rodada</a>
+        <a class="nav-link" href="?module=admin3&action=verDisponibilidades">Disponibilidades</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="?module=admin3&action=proporJogos">Agendáveis</a>
       </li>
       
     </ul>
