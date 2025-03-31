@@ -128,3 +128,7 @@ CREATE TABLE rodada_controle (
     ano INT NOT NULL,
     rodada_em_andamento TINYINT(1) NOT NULL DEFAULT 0
 );
+
+
+ALTER TABLE jogos_agendados ADD COLUMN barragem INT DEFAULT 1;
+

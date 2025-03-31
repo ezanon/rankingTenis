@@ -689,11 +689,18 @@ public function confirmarRodada() {
             }
         }
 
-        // **Marcar rodada como "em andamento"**
+        // **Atualizar rodada como "em andamento"**
         $this->banco->executar("UPDATE rodada_controle SET rodada = :rodada, ano = :ano, rodada_em_andamento = 1 WHERE id = 1", [
             "rodada" => $novaRodada,
             "ano" => $anoAtual
         ]);
+
+        // **Marcar jogadores que têm jogos agendados**
+        $this->banco->executar("UPDATE jogador 
+                                SET jogo_agendado = 1 
+                                WHERE id IN (SELECT jogador1_id FROM jogos_agendados 
+                                             UNION 
+                                             SELECT jogador2_id FROM jogos_agendados)");
 
         // **Mensagem de retorno**
         if ($sucesso > 0) {
@@ -720,10 +727,6 @@ public function confirmarRodada() {
                 </div>
             </div>";
 }
-
-
-
-
 
 
 
