@@ -132,3 +132,8 @@ CREATE TABLE rodada_controle (
 
 ALTER TABLE jogos_agendados ADD COLUMN barragem INT DEFAULT 1;
 
+ALTER TABLE jogos_agendados ADD COLUMN jogo_possivel TINYINT(1) DEFAULT 0;
+
+ALTER TABLE jogos_agendados 
+MODIFY COLUMN quadra VARCHAR(255) NULL, 
+MODIFY COLUMN horario TIME NULL;

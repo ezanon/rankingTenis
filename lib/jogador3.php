@@ -4,10 +4,20 @@ class jogador3 {
 
     public $banco;
 
-    function __construct() {
+    public function __construct() {
         $this->banco = banco::instanciar();
         return true;
     }
+    
+    public function dados($id) {
+
+        $sql = "SELECT * FROM jogador WHERE id = :jogador_id";
+        $res = $this->banco->consultar($sql, ["jogador_id" => $id]);
+
+        return $res ? $res[0] : null; // Retorna os dados do jogador ou null se não encontrar
+    }
+
+    
 
     public function exibirJogadorComBadges($id, $fav, $cat = '', $mostrarDisponibilidade = true, $layout = 1) {
         // Buscar dados do jogador

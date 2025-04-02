@@ -111,4 +111,94 @@ class fe {
     }
 }
 
+
+public function registrarJogoPossivel() {
+    
+    // Verifica se os campos necessários foram enviados
+    if (!isset($_POST['adversario'], $_POST['vencedor'], $_POST['resultado'], $_POST['bolas'], $_POST['categoria'], $_POST['barragem'])) {
+        return $this->mensagem('Erro: Todos os campos são obrigatórios!', 'danger');
+    }
+
+    $jogador_id = $_SESSION['jogador']['id'];
+    $adversario_id = $_POST['adversario'];
+    $vencedor = $_POST['vencedor'];
+    $resultado = $_POST['resultado'];
+    $bolas = $_POST['bolas'];
+    $observacoes = $_POST['observacoes'] ?? ''; // Pode ser opcional
+    $categoria = $_POST['categoria'];
+    $barragem = $_POST['barragem'];
+    $parciais = $_POST['parciais'];
+
+    // Se o vencedor for 0, significa que o adversário venceu
+    if ($vencedor == 0) {
+        $vencedor = $adversario_id;
+    }
+    if ($bolas == 0) {
+        $bolas = $adversario_id;
+    }
+
+    // Verifica se já existe um jogo possível registrado
+    $sqlVerificar = "SELECT id FROM jogos_agendados 
+                     WHERE (jogador1_id = :jogador_id OR jogador2_id = :jogador_id) 
+                     AND jogo_possivel = 1
+                     LIMIT 1";
+    
+    $jogoExistente = $this->banco->consultar($sqlVerificar, ["jogador_id" => $jogador_id]);
+
+    if ($jogoExistente) {
+        // Atualiza o jogo existente
+        $sqlAtualizar = "UPDATE jogos_agendados 
+                         SET jogador1_id = :jogador1, jogador2_id = :jogador2, vencedor_id = :vencedor, 
+                             resultado = :resultado, quem_levou_bola = :bolas, observacoes = :observacoes, 
+                             categoria = :categoria, parciais = :parciais 
+                         WHERE id = :jogo_id";
+        
+        $params = [
+            "jogador1" => $jogador_id,
+            "jogador2" => $adversario_id,
+            "vencedor" => $vencedor,
+            "resultado" => $resultado,
+            "bolas" => $bolas,
+            "categoria" => $categoria,
+            "observacoes" => $observacoes,
+            "parciais" => $parciais,
+            "jogo_id" => $jogoExistente[0]['id']
+        ];
+
+        if ($this->banco->executar($sqlAtualizar, $params)) {
+            return $this->mensagem('Jogo atualizado com sucesso!', 'success');
+        } else {
+            return $this->mensagem('Erro ao atualizar o jogo.', 'danger');
+        }
+    } else {
+        // Inserir o jogo na tabela jogos_agendados
+        $sqlInserir = "INSERT INTO jogos_agendados (jogador1_id, jogador2_id, vencedor_id, resultado, quem_levou_bola, observacoes, categoria, jogo_possivel) 
+                       VALUES (:jogador1, :jogador2, :vencedor, :resultado, :bolas, :observacoes, :categoria, 1)";
+
+        $params = [
+            "jogador1" => $jogador_id,
+            "jogador2" => $adversario_id,
+            "vencedor" => $vencedor,
+            "resultado" => $resultado,
+            "bolas" => $bolas,
+            "categoria" => $categoria,
+            "observacoes" => $observacoes
+        ];
+
+        if ($this->banco->executar($sqlInserir, $params)) {
+            return $this->mensagem('Jogo registrado com sucesso!', 'success');
+        } else {
+            return $this->mensagem('Erro ao registrar o jogo.', 'danger');
+        }
+    }
+}
+
+
+    private function mensagem($texto, $tipo) {
+        return '<div class="alert alert-' . $tipo . ' p-3 text-center" role="alert">' . $texto . '</div>';
+    }
+
+
+
+
 }

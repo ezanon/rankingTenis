@@ -29,7 +29,7 @@
             ?>       
         </div>
 
-        <!-- DISPONIBILIDADE 2a a 4a 12h -->
+<!-- DISPONIBILIDADE 2a a 4a 12h -->
         <?php
 // Obtém o dia da semana (1 = Segunda, 7 = Domingo) e a hora atual
         $diaSemana = date('N');
@@ -99,9 +99,10 @@
                 <i class="bi bi-info-circle-fill"></i> O período para definir a disponibilidade está fechado. Volte na próxima segunda-feira!
             </div>
         <?php endif; ?>
+<!-- DISPONIBILIDADE 2a a 4a 12h FIM -->
 
 
-        <!-- REGISTRO DE RESULTADOS DE JOGOS AGENDADOS -->
+<!-- REGISTRO DE RESULTADOS DE JOGOS AGENDADOS -->
         <?php
 // **Verificar se o formulário deve ser exibido**
         $exibirFormulario = false;
@@ -167,10 +168,10 @@
                     <span class="badge bg-secondary text-white"><?= htmlspecialchars($categoria) ?></span>
                     <span class="badge bg-primary text-white">B<?= $barragem ?></span><br>
                     <span class="badge bg-info text-white">#<?= $posicaoJogador1 ?></span>
-    <?= htmlspecialchars($nomeJogador1) ?>
+                    <?= htmlspecialchars($nomeJogador1) ?>
                     <br>x<br>
                     <span class="badge bg-info text-white">#<?= $posicaoJogador2 ?></span>
-    <?= htmlspecialchars($nomeJogador2) ?>
+                    <?= htmlspecialchars($nomeJogador2) ?>
                 </p>
             </div>
 
@@ -221,13 +222,145 @@
                     <button type="submit" class="btn btn-primary">Registrar Resultado</button>
                 </div>
             </form>
-<?php endif; ?>
+        <?php endif; ?>
+<!-- REGISTRO DE RESULTADOS DE JOGOS AGENDADOS FIM -->
 
 
+<!-- REGISTRO DE RESULTADOS DE JOGOS POSSÍVEIS -->
+<?php
+// **Verificar se há uma rodada em andamento**
+$rodada = new rodada3;
+$rodadaEmAndamento = $rodada->em_andamento();
 
-        <!-- 
-        ATUALIZAR CONTATOS 
-        -->
+if (!$rodadaEmAndamento) {
+    echo '<p class="text-center text-danger">Nenhuma rodada está em andamento.</p>';
+    return;
+}
+//if ($diaSemana == 3 && $horaAtual >= 12 && $horaAtual < 18) {
+//    echo '<p class="text-center text-danger">O registro de jogos está suspenso entre 12h e 18h das quartas-feiras.</p>';
+//    return;
+//}
+
+// **Obter dados do jogador**
+$jogador = new jogador3;
+$dadosJogador = $jogador->dados($id);
+
+// **Verificar quais rankings o jogador participa**
+$categoriasParaBuscar = [];
+if ($dadosJogador['ranking_misto'] == 1) {
+    $categoriasParaBuscar[] = ['categoria' => $dadosJogador['categoria_misto'], 'barragem' => $dadosJogador['barragem_misto'], 'ranking' => 'misto'];
+}
+if ($dadosJogador['ranking_feminino'] == 1) {
+    $categoriasParaBuscar[] = ['categoria' => $dadosJogador['categoria_feminino'], 'barragem' => $dadosJogador['barragem_feminino'], 'ranking' => 'feminino'];
+}
+
+// **Verificar se já tem jogo possivel cadastrado**
+$jogos = new jogos3;
+$jogoAgendado = $jogos->tem_jogo_agendado($id);
+$jogoPossivel = $jogos->tem_jogo_possivel($id);
+
+if ($jogoAgendado) {
+    $categoriaAgendada = strtolower($jogoAgendado[0]["categoria"]);
+    $categoriasParaBuscar = array_filter($categoriasParaBuscar, function ($categoria) use ($categoriaAgendada) {
+        return ($categoriaAgendada == 'wta' && $categoria['ranking'] == 'misto') || ($categoriaAgendada != 'wta' && $categoria['ranking'] == 'feminino');
+    });
+}
+
+if ($jogoPossivel){
+    $jogo = $jogoPossivel[0];
+    $adversario_id = ($jogo['jogador1_id'] == $id) ? $jogo['jogador2_id'] : $jogo['jogador1_id'];
+}
+
+foreach ($categoriasParaBuscar as $categoriaInfo) {
+    // **Buscar adversários possíveis**
+    $sqlAdversarios = "SELECT id, nome_completo, posicao_misto, posicao_feminino FROM jogador
+                        WHERE jogo_agendado = 0 
+                        AND categoria_" . $categoriaInfo['ranking'] . " = :categoria
+                        AND barragem_" . $categoriaInfo['ranking'] . " = :barragem
+                        AND id != :jogador_id";
+    $adversarios = $banco->consultar($sqlAdversarios, [
+        "categoria" => $categoriaInfo['categoria'],
+        "barragem" => $categoriaInfo['barragem'],
+        "jogador_id" => $id
+    ]);
+
+    echo '<form method="POST" action="?module=fe&action=registrarJogoPossivel" id="jogoPossivelForm">';
+    echo '<input type="hidden" name="categoria" id="categoria" value="' . htmlspecialchars($categoriaInfo['categoria']) . '">';
+    echo '<input type="hidden" name="barragem" id="barragem" value="' . htmlspecialchars($categoriaInfo['barragem']) . '">';
+    echo '<div class="p-3 border rounded mb-3">';
+    echo '<h4 class="text-center mb-2">Registro de Jogo Possível</h4>';
+    echo '<p class="text-center text-danger"><small>O cadastro de jogo deve ocorrer até quarta-feira às 12h00.</small></p>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="adversario" class="form-label">Adversário:</label>';
+    echo '<select id="adversario" name="adversario" class="form-select" required onchange="atualizarNomeVencedor()">';
+    echo '<option value="" disabled selected>Selecione um adversário</option>';
+    foreach ($adversarios as $adversario) {
+        $selected = ($jogoPossivel && $adversario["id"] == $adversario_id) ? ' selected' : '';
+        echo '<option value="' . $adversario["id"] . '"' . $selected . '>';
+        echo '#' . htmlspecialchars($adversario['posicao_' . $categoriaInfo['ranking']]) . ' ' . htmlspecialchars($adversario["nome_completo"]);
+        echo '</option>';
+    }
+    echo '</select>';
+    echo '</div>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="vencedor" class="form-label">Jogador Vencedor:</label>';
+    $vencedorSelecionado = ($jogoPossivel && $jogoPossivel[0]["vencedor_id"] == $id) ? $id : 0;
+    echo '<select id="vencedor" name="vencedor" class="form-select" required>';
+    echo '<option value="" disabled>Selecione o vencedor</option>';
+    echo '<option value="' . $id . '"' . ($vencedorSelecionado == $id ? ' selected' : '') . '>' . htmlspecialchars($dadosJogador["nome_completo"]) . '</option>';
+    echo '<option id="opcaoAdversario" value="0"' . ($vencedorSelecionado == 0 ? ' selected' : '') . '>Meu oponente</option>';
+    echo '</select>';
+    echo '</div>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="resultado" class="form-label">Resultado:</label>';
+    $resultadoSelecionado = $jogoPossivel ? $jogoPossivel[0]["resultado"] : '';
+    echo '<select id="resultado" name="resultado" class="form-select" required>';
+    echo '<option value="" disabled' . ($resultadoSelecionado == '' ? ' selected' : '') . '>Selecione o resultado</option>';
+    echo '<option value="2x0"' . ($resultadoSelecionado == "2x0" ? ' selected' : '') . '>2x0</option>';
+    echo '<option value="2x1"' . ($resultadoSelecionado == "2x1" ? ' selected' : '') . '>2x1</option>';
+    echo '<option value="WO"' . ($resultadoSelecionado == "WO" ? ' selected' : '') . '>WO</option>';
+    echo '<option value="Abandono"' . ($resultadoSelecionado == "Abandono" ? ' selected' : '') . '>Abandono</option>';
+    echo '<option value="FAV"' . ($resultadoSelecionado == "FAV" ? ' selected' : '') . '>Falta com Aviso</option>';
+    echo '</select>';
+    echo '</div>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="parciais" class="form-label">Parciais:</label>';
+    $parciais = $jogoPossivel ? htmlspecialchars($jogoPossivel[0]["parciais"]) : '';
+    echo '<input type="text" id="parciais" name="parciais" class="form-control" placeholder="Exemplo: 6/4, 3/6, 7/5" value="' . $parciais . '">';
+    echo '</div>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="bolas" class="form-label">Quem levou bolas novas?</label>';
+    $bolasNovas = $jogoPossivel ? $jogoPossivel[0]["quem_levou_bola"] : '';
+    echo '<select id="bolas" name="bolas" class="form-select" required>';
+    echo '<option value="" disabled ' . (!$bolasNovas ? 'selected' : '') . '>Selecione</option>';
+    echo '<option value="' . $id . '" ' . ($bolasNovas == $id ? 'selected' : '') . '>' . htmlspecialchars($dadosJogador["nome_completo"]) . '</option>';
+    echo '<option id="opcaoBolasAdversario" value="0" ' . ($bolasNovas == 0 ? 'selected' : '') . '>Meu oponente</option>';
+    echo '</select>';
+    echo '</div>';
+
+    echo '<div class="mb-3">';
+    echo '<label for="observacoes" class="form-label">Observações:</label>';
+    $observacoes = $jogoPossivel ? htmlspecialchars($jogoPossivel[0]["observacoes"]) : '';
+    echo '<textarea id="observacoes" name="observacoes" class="form-control">' . $observacoes . '</textarea>';
+    echo '</div>';
+
+    $textoBotao = $jogoPossivel ? "Atualizar Jogo" : "Registrar Jogo";
+    echo '<button type="submit" class="btn btn-primary">' . $textoBotao . '</button>';
+
+    echo '</div>';
+    echo '</form>';
+}
+?>
+
+<!-- REGISTRO DE RESULTADOS DE JOGOS POSSÍVEIS FIM -->
+
+
+<!-- ATUALIZAR CONTATOS -->
         <?php
         $email = $j->email;
         $cel = $j->telcel;
@@ -278,9 +411,9 @@
                         });
             });
         </script>
+<!-- ATUALIZAR CONTATOS FIM -->
 
-
-        <!-- ALTERAÇÃO DE SENHA -->
+<!-- ALTERAÇÃO DE SENHA -->
         <form id="senhaForm">
             <div class="p-3 border rounded mb-3">
                 <!-- Título -->
@@ -341,7 +474,7 @@
                         });
             });
         </script>
-
+<!-- ALTERAÇÃO DE SENHA FIM -->
 
 
 
